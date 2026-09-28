@@ -1,13 +1,13 @@
 # swisstrace
 
-An R package that corrects and calibrates raw Swisstrace **twilite**
+R and Python packages that corrects and calibrates raw Swisstrace **twilite**
 automatic-blood-sampler `.crv` files (whole-blood radioactivity over time) into
 calibrated whole-blood activity input functions (AIFs, kBq/cc). The goal is a generic,
 automated, scriptable correction so this step can be done with ordinary tooling in R.
 
 ## Layout
 
-This repo is the **R package itself** (standard layout):
+The repository contains two independently installable packages. The complete R package is in `R/`; the paths below are relative to that directory. Python lives in `Python/` (see its README for the API and tests).
 
 - `R/` — package source.
   - `swisstrace_correct.R` — the core correction (also defines `assert_raw_crv()`).
@@ -20,7 +20,7 @@ This repo is the **R package itself** (standard layout):
   grDevices, jsonlite, stats, tibble, tools, utils; Suggests: readxl for Excel
   manifests, testthat).
 
-Build/iterate with `devtools::load_all()` / `devtools::document()` /
+From the `R/` package directory, build/iterate with `devtools::load_all()` / `devtools::document()` /
 `devtools::install()`. Real `.crv` data and reference outputs live outside this repo,
 in a separate data/analysis workspace.
 
@@ -128,3 +128,10 @@ max(abs(res$tac$activity - ref))
 ## Next
 
 Batch conversion over many measurements is implemented (`swisstrace_convert_batch()`).
+
+## Python development
+
+From the repository root: `python -m pip install -e "./Python[test,excel]"` and
+`python -m pytest Python/tests`. Keep valid-input correction mathematics aligned
+with R; cross-language tests run with R/tibble/jsonlite in CI. Python QC returns
+a Matplotlib Figure, correction returns a dictionary, and tables are pandas DataFrames.
