@@ -2,12 +2,13 @@
 
 Correct and calibrate raw Swisstrace **twilite** automatic blood-sampler `.crv`
 recordings into whole-blood activity curves, with PMOD, QC plots and BIDS PET blood
-exports. Equivalent tools are available in R and Python.
+exports. Equivalent tools are available in R, Python and MATLAB.
 
 | Folder | Contents | Installation from this checkout |
 | --- | --- | --- |
 | [R/](R/) | Complete R package: source, metadata, documentation and tests | `remotes::install_local("R")` |
 | [Python/](Python/) | Installable Python package, documentation and tests | `python -m pip install ./Python` |
+| [MATLAB/](MATLAB/) | MATLAB functions, documentation and tests; no additional toolboxes | `addpath("MATLAB")` |
 
 The repository root is no longer an R package. Existing R installations should
 use the `R` subdirectory:
@@ -26,10 +27,17 @@ paths = swisstrace_process("recording.crv", calibration_factor=0.425,
                            isotope="F18", pet_start="11:16:30")
 ```
 
-See the [R guide](R/README.md) or [Python guide](Python/README.md) for batch
+```matlab
+addpath('MATLAB');
+paths = swisstrace_process('recording.crv', 0.425, 'F18', ...
+    'pet_start', '11:16:30');
+```
+
+See the [R guide](R/README.md), [Python guide](Python/README.md) or
+[MATLAB guide](MATLAB/README.md) for batch
 conversion, calibration lookup, frame schemes and BIDS output.
 
-Both implementations use the coincidence channel (the first counter), subtract
+All implementations use the coincidence channel (the first counter), subtract
 background, correct decay relative to PET start, and apply the calibration factor.
 Native sampling is retained unless a frame scheme is supplied. Supply the correct
 isotope or an explicit half-life in seconds; it cannot be inferred from the file.
@@ -54,3 +62,18 @@ otherwise those tests are skipped. GitHub CI installs both runtimes and checks
 numerical agreement, calibration lookup and exported curves. Real recordings and
 vendor reference outputs are not included, so the Python port has not been
 independently validated against those reference outputs.
+
+MATLAB requires R2021a or newer. Run its tests with:
+
+```matlab
+addpath('MATLAB');
+results = runtests('MATLAB/tests');
+assertSuccess(results);
+```
+
+The MATLAB workflow generates reference outputs directly from `R/R/`, then runs
+MATLAB tests comparing correction, framing, calibration lookup and exported curves.
+For those comparisons locally, first run
+`Rscript MATLAB/tests/generate_r_reference.R` from the repository root; otherwise
+the two R comparison tests are skipped. Synthetic tests do not replace validation
+against real twilite/vendor reference recordings.
