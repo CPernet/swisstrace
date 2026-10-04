@@ -63,7 +63,8 @@ numerical agreement, calibration lookup and exported curves. Real recordings and
 vendor reference outputs are not included, so the Python port has not been
 independently validated against those reference outputs.
 
-MATLAB requires R2021a or newer. Run its tests with:
+MATLAB support is tested on R2024b on Linux; other releases and platforms are
+unverified. No R2021a+ compatibility claim is made. Run its tests with:
 
 ```matlab
 addpath('MATLAB');
@@ -77,3 +78,8 @@ For those comparisons locally, first run
 `Rscript MATLAB/tests/generate_r_reference.R` from the repository root; otherwise
 the two R comparison tests are skipped. Synthetic tests do not replace validation
 against real twilite/vendor reference recordings.
+
+Real/vendor validation is a documented follow-up for the MATLAB port, rather than
+a blocker to merging the synthetic/R-parity-tested implementation. It is required
+before claiming vendor equivalence or relying on the port for production analysis;
+see the [validation follow-up](MATLAB/README.md#realvendor-validation-follow-up).

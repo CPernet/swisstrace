@@ -4,6 +4,7 @@ permissions:
   contents: read
 jobs:
   matlab:
+    name: MATLAB R2024b (Linux) and R parity
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +17,7 @@ jobs:
           Rscript MATLAB/tests/generate_r_reference.R
       - uses: matlab-actions/setup-matlab@v3
         with:
+          # The documented supported/tested release; broaden only after CI validation.
           release: R2024b
       - name: Run MATLAB tests including R comparisons
         uses: matlab-actions/run-command@v3

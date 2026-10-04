@@ -1,6 +1,6 @@
 # swisstrace
 
-R, Python and MATLAB tools that correct and calibrates raw Swisstrace **twilite**
+R, Python and MATLAB tools that correct and calibrate raw Swisstrace **twilite**
 automatic-blood-sampler `.crv` files (whole-blood radioactivity over time) into
 calibrated whole-blood activity input functions (AIFs, kBq/cc). The goal is a generic,
 automated, scriptable correction so this step can be done with ordinary tooling in R.
@@ -37,7 +37,7 @@ YYYY M D H M S.sss   <Counter_1>   <Counter_2>   <Counter_3>
 files begin with a `Corrected_&_calibrated ... value` header). It is called by both
 `swisstrace_correct()` and `swisstrace_process()`.
 
-## The correction (reverse-engineered, validated to <0.06 kBq/cc against reference outputs)
+## The correction (R implementation reverse-engineered and validated to <0.06 kBq/cc against reference outputs)
 
 ```
 corrected(t) = (coincidence(t) − background) × exp(λ·(t − t0)) × calibration_factor
@@ -138,9 +138,14 @@ a Matplotlib Figure, correction returns a dictionary, and tables are pandas Data
 
 ## MATLAB development
 
-MATLAB R2021a+; no additional toolboxes. Add `MATLAB/` to the path, then run
+MATLAB support is tested on R2024b on Linux; other releases and platforms are
+unverified. No additional toolboxes. Add `MATLAB/` to the path, then run
 `results = runtests('MATLAB/tests'); assertSuccess(results)`. Public function
 names match R; optional inputs use name/value pairs, results are structs/tables,
 and QC returns a figure. Helpers stay in `MATLAB/private/`.
 `MATLAB/tests/generate_r_reference.R` generates deterministic expected values
 from the R implementation; the MATLAB CI job runs these comparisons.
+
+The R reference-output validation above does not independently validate the MATLAB
+port against real/vendor recordings. See `MATLAB/README.md` for the outstanding
+validation follow-up and its acceptance criteria.

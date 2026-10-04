@@ -1,4 +1,4 @@
-% Swisstrace twilite correction and calibration (MATLAB R2021a or newer).
+% Swisstrace twilite correction and calibration (tested on MATLAB R2024b on Linux).
 % No additional toolboxes required. Add this folder to the MATLAB path.
 %
 % swisstrace_correct       - Background, decay and calibration correction.

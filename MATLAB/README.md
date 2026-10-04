@@ -1,7 +1,9 @@
 # swisstrace for MATLAB
 
 MATLAB equivalents of all seven public [R functions](../R/README.md), ported
-from `R/R/`. Requires **MATLAB R2021a or newer**, with no additional toolboxes.
+from `R/R/`. Supported/tested configuration: **MATLAB R2024b on Linux**,
+with no additional toolboxes. Other releases and platforms are unverified;
+R2021a+ compatibility is not currently claimed.
 R and Python are not needed to use this implementation.
 
 ## Installation
@@ -161,3 +163,24 @@ compares native/framed/automatic/C11 outputs and exports. Without generated
 references, only those two comparison tests are skipped. Generated fixtures are
 ignored by Git. Real/vendor reference recordings are not bundled, so independent
 validation against those data remains necessary for the MATLAB port.
+
+### Real/vendor validation follow-up
+
+The analytical tests and direct R comparisons establish implementation parity on
+synthetic inputs. This is sufficient to merge the MATLAB port with the limitation
+above; it does not establish independent agreement with vendor outputs. Real/vendor
+validation remains a follow-up and is required before claiming vendor equivalence
+or relying on this port for production analysis.
+
+To complete that follow-up:
+
+- Use representative raw twilite recordings with matched vendor/reference corrected
+  curves, known calibration factors, isotope/half-life and PET start. Keep restricted
+  recordings outside Git; commit shareable fixtures only with permission.
+- Compare MATLAB with both R and the independent reference, checking activity,
+  time alignment, units, native/framed sampling and automatic versus supplied starts.
+- Record MATLAB release/platform, input provenance, settings and maximum absolute
+  activity error. Define the acceptable tolerance for each reference before comparing;
+  the historical R error below 0.06 kBq/cc is not a validated MATLAB tolerance.
+- Investigate discrepancies, add shareable regression coverage where possible and
+  document the results and remaining limitations before extending validation claims.
